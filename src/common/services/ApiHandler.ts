@@ -3,8 +3,11 @@ import { parseCookies } from 'nookies';
 import Cookies from 'js-cookie';
 
 const jwtToken = Cookies.get('jwtToken')
+let apiGatewayUrl = process.env.API_GATEWAY;
+
 export default class ApiHandler implements IApiHandler {
     public get(url: string, params: Param[]): Promise<any> {
+        url = `${apiGatewayUrl}${url}`;
         return fetch(url).then(response => {
             if (response.status >= 200 && response.status < 400) {
                 return this.parseResponse(response);
@@ -20,31 +23,8 @@ export default class ApiHandler implements IApiHandler {
         })
     }
 
-    public getWithAuth(url: string, params: Param[]): Promise<any> {
-        console.log(234);
-        console.log(jwtToken);
-
-        return fetch(url, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${jwtToken}`
-            }
-        }).then(response => { 
-            if (response.status >= 200 && response.status < 400) {
-                return this.parseResponse(response);
-            } else {
-                return null;
-            }
-        }).then(data => {
-            return data;
-        }).catch(() => {
-            return new Promise((resolve, reject) => {
-                resolve(null);
-            });
-        })
-    }
-
     public post(url: string, data: any): Promise<any> {
+        url = `${apiGatewayUrl}${url}`;
         return fetch(url, {
             method: "POST",
             body: data as string,
