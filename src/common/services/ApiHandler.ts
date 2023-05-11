@@ -8,6 +8,13 @@ let apiGatewayUrl = process.env.API_GATEWAY;
 export default class ApiHandler implements IApiHandler {
     public get(url: string, params: Param[]): Promise<any> {
         url = `${apiGatewayUrl}${url}`;
+        if (params.length > 0) {
+            url += "?"
+            params.forEach((param: Param) => {
+                url += `${param.key}=${param.value}&`;
+            });
+            url = url.slice(0, -1)
+        }    
         return fetch(url).then(response => {
             if (response.status >= 200 && response.status < 400) {
                 return this.parseResponse(response);

@@ -27,8 +27,10 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword
 } from "firebase/auth";
+import ProfileService from "@/modules/ProfileService";
 
 
+let profileService: ProfileService = new ProfileService(new ApiHandler(), new SessionService());
 
 export default function register(props:any) {
     const [email, setEmail] = useState<string>("");
@@ -40,6 +42,8 @@ export default function register(props:any) {
         e.preventDefault();
         const credential = await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             const user = userCredential.user;
+            // create new profile
+            profileService.createNewProfile(user.uid, user.email!);
             sendEmailVerification(user);
         }).catch((error) => {
             console.log("error " + error.message)

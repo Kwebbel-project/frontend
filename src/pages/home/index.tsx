@@ -3,56 +3,32 @@ import SessionService from "@/common/services/SessionService";
 import Tweet from "@/common/types/Tweet";
 import TweetService from "@/modules/TweetService"
 import React, { useEffect, useState } from 'react'
-import { useAuth } from 'reactfire';
-import { getAuth, signOut} from "firebase/auth";
 
 let tweetService: TweetService = new TweetService(new ApiHandler(), new SessionService());
 export default function index() {
   const [tweet, setTweet] = useState("")
   const [tweets, setTweets] = useState<Tweet[]>()
-  const auth = useAuth();
 
   useEffect(() => {
-    tweetService.getTweets().then(tweets => {
-      setTweets(tweets);
-    });
+    let socket = new WebSocket("ws://localhost:5003/ws");
+
+    socket.onopen = (event) => {
+      console.log('WebSocket connected');
+    };
+
+    socket.onmessage = (event) => {
+      const newData = JSON.parse(event.data);
+      setTweets(newData)
+    };
   }, [])
   
-  function signOutFromAccount() {
-    signOut(auth);
-  }
-
   function postTweet() {
     tweetService.postTweet(tweet, "authortest", 1);
   }
 
   return (
     <div>
-      <nav className="flex items-center justify-between flex-wrap bg-sky-400 p-6">
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
-          <span className="font-semibold text-xl tracking-tight">Kwebbel</span>
-        </div>
-        <div className="block lg:hidden">
-          <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-            <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-          </button>
-        </div>
-        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-          <div className="text-sm lg:flex-grow">
-            <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
-              Home
-            </a>
-            <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
-              1
-            </a>
-            <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white">
-              2
-            </a>
-          </div>
-          <div>
-          </div>
-        </div>
-      </nav>
+      
       <div className="grid grid-cols-3 place-content-center mt-3">
         <div className="col-span-1">
         </div>
@@ -63,13 +39,21 @@ export default function index() {
           </label>
           <button onClick={postTweet} className="bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-full w-4/12 mt-2">
             Tweeten
-        </button>
-        <button onClick={signOutFromAccount} className="bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-full w-4/12 mt-2">
-            sign out
-        </button>
-        <div>
+          </button>
+        <div>    
           {tweets?.map((tweet) => {
-            return <div>{tweet.content}</div>
+            return (
+              <div className="group relative">
+                <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                  <a href="#">
+                    <span className="absolute inset-0"></span>
+                    {tweet.Author}
+                  </a>
+                </h3>
+                <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{tweet.Content}</p>
+              </div>
+            )
+            
           })}
         </div>
         </div>
