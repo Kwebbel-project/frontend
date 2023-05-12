@@ -1,6 +1,5 @@
 export default interface IApiHandler {
   get(url: string, params: Param[]): Promise<any>;
-  getWithAuth(url: string, params: Param[]): Promise<any>;
   post(url: string, data: any): Promise<any>;
 }
 

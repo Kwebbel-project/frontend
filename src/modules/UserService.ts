@@ -2,7 +2,6 @@ import IApiHandler, { Param } from "@/common/services/interfaces/IApiHandler";
 import ISessionService from "@/common/services/interfaces/ISessionService";
 import SessionService from "@/common/services/SessionService";
 import User from "@/common/types/User";
-import nookies, { setCookie } from "nookies";
 
 export default class UserService {
 
@@ -17,7 +16,7 @@ export default class UserService {
     }
 
     getUsers() : Promise<User[]> {
-        return this.apiHandler.get("http://localhost:5148/Api/user", [new Param("sdf","df")]).then(users => {
+        return this.apiHandler.get("gateway/Api/user", [new Param("sdf","df")]).then(users => {
             return users;
         })
     }
@@ -31,24 +30,11 @@ export default class UserService {
     }
 
     login(email: string, password: string) : Promise<boolean> {
-        return this.apiHandler.post("http://localhost:5148/Api/auth/login", `{
+        return this.apiHandler.post("/user-service/auth/login", `{
             "email": "${email}",
             "password": "${password}"
         }`).then(token => {
-            // setCookie(null, 'token', token, {
-            //     maxAge: 7200,
-            //     secure: true
-            // })
-            //    this.sessionService.setItem(this.userKey, user)
             return token;
-        });
-    }
-
-    authorizedRequestTest() : Promise<boolean> {
-        return this.apiHandler.getWithAuth("http://localhost:5148/Api/auth/test", [new Param("sdf", "df")]).then(result => {
-            console.log(234);
-            console.log(result);
-            return result;
         });
     }
 }
