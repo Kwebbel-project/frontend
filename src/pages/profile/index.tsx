@@ -1,6 +1,6 @@
 
 import ProfileService from "@/modules/ProfileService";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut, deleteUser } from "firebase/auth";
 import { useEffect, useState } from "react";
 import ApiHandler from "@/common/services/ApiHandler";
 import SessionService from "@/common/services/SessionService";
@@ -9,6 +9,7 @@ let profileService: ProfileService = new ProfileService(new ApiHandler(), new Se
 export default function index() {
     const [profile, setProfile] = useState<Profile>(new Profile())
     const auth = getAuth();
+    const user = auth.currentUser;
 
     useEffect(() => {
       // get profile information
@@ -16,6 +17,21 @@ export default function index() {
             setProfile(profile)
         })
     }, [])
+
+    function signOutFromAccount() {
+        auth.signOut();
+    }
+
+    function deleteProfile() {
+        console.log(user)
+        deleteUser(user!).then(() => {
+            // Also delete from profile database
+            profileService.deleteProfile(user!.uid);
+            }).catch((error) => {
+            // An error ocurred
+            // ...
+        });
+    }
 
     function updateProfile() {
         if (profile) {
@@ -30,7 +46,12 @@ export default function index() {
             </div>
             <div className="col-span-1">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                    <h1 className="text-2xl font-medium">Profiel</h1>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl font-medium">Profiel</h1>
+                        <button onClick={signOutFromAccount} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Sign out
+                        </button>
+                    </div>
                     <br/>
                     <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -60,7 +81,7 @@ export default function index() {
                     <button onClick={updateProfile} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                         Update
                     </button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    <button onClick={deleteProfile} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                         Delete profile
                     </button>
                     </div>

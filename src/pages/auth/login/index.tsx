@@ -67,6 +67,7 @@ export default function index(props:any) {
           password
         ).then(function (userCredential) {
           // signed in.
+          Router.push('/home')
           console.log("signed in")
       }).catch(function (error) {
         if (error.code == 'auth/multi-factor-auth-required') {
@@ -92,6 +93,7 @@ export default function index(props:any) {
                 })
                 .then(function (userCredential) {
                   // User successfully signed in with the second factor phone number.
+                  Router.push('/home')
                   console.log("signed in with 2fa")
               });
         } else if (error.code == 'auth/wrong-password') {
@@ -143,6 +145,7 @@ function Copyright(props: any) {
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
+              id="email"
               margin="normal"
               required
               fullWidth
@@ -154,6 +157,7 @@ function Copyright(props: any) {
               onChange={e => setEmail(e.target.value)}
             />
             <TextField
+              id="password"
               margin="normal"
               required
               fullWidth
@@ -184,7 +188,7 @@ function Copyright(props: any) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link id="signUp" onClick={() => Router.push("/auth/register")} href="#" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
