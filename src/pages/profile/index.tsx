@@ -4,7 +4,7 @@ import { getAuth, signOut, deleteUser } from "firebase/auth";
 import { useEffect, useState } from "react";
 import ApiHandler from "@/common/services/ApiHandler";
 import SessionService from "@/common/services/SessionService";
-import Profile from "@/common/types/profile";
+import Profile from "@/common/types/Profile";
 let profileService: ProfileService = new ProfileService(new ApiHandler(), new SessionService());
 export default function index() {
     const [profile, setProfile] = useState<Profile>(new Profile())
@@ -54,25 +54,25 @@ export default function index() {
                     </div>
                     <br/>
                     <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                         Username
                     </label>
                     <input value={profile?.email} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email" disabled/>
                     </div>
                     <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" for="fullname">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullname">
                         Fullname
                     </label>
                     <input value={profile?.fullname} onChange={e => setProfile({...profile, fullname: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  id="fullname" type="text" placeholder="Fullname"/>
                     </div>
                     <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" for="phone">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
                         Phone
                     </label>
                     <input value={profile?.phone} onChange={e => setProfile({...profile, phone: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  id="phone" type="text" placeholder="Phone"/>
                     </div>
                     <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" for="address">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
                         Address
                     </label>
                     <input value={profile?.address} onChange={e => setProfile({...profile, address: e.target.value })} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  id="address" type="text" placeholder="Address"/>

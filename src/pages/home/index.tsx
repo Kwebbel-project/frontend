@@ -19,6 +19,7 @@ export default function index() {
     socket.onmessage = (event) => {
       const newData = JSON.parse(event.data);
       setTweets(newData)
+      console.log(newData)
     };
   }, [])
   

@@ -1,7 +1,7 @@
 export default class Tweet {
     id: number | null;
-    content: string;
-    author: string;
+    Content: string;
+    Author: string;
     likes: number;
     createdAt: Date;
     userId: number;
@@ -16,8 +16,8 @@ export default class Tweet {
         id: number | null = null
       ) {
         this.id = id;
-        this.content = content;
-        this.author = author;
+        this.Content = content;
+        this.Author = author;
         this.likes = likes;
         this.createdAt = createdAt;
         this.userId = userId;
