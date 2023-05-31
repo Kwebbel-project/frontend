@@ -13,7 +13,7 @@ const useAuth = (auth) => {
       console.log(user)
       setUser(user);
       if (user === null) {
-        router.push('/auth/login');
+        // router.push('/auth/login');
         sessionService.deleteItem("uid");
       } 
       else {

@@ -41,4 +41,10 @@ export default class ProfileService {
         })
     }
 
+    deleteProfile(uid: string) : Promise<boolean> {
+        return this.apiHandler.delete("/profile-service/profile", [new Param("uid", uid)]).then(response => {
+            return response;
+        })
+    }
+
 }

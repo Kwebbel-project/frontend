@@ -6,6 +6,23 @@ const jwtToken = Cookies.get('jwtToken')
 let apiGatewayUrl = process.env.API_GATEWAY;
 
 export default class ApiHandler implements IApiHandler {
+    
+    delete(url: string, params: Param[]): Promise<any> {
+        url = `${apiGatewayUrl}${url}`;
+        if (params.length > 0) {
+            url += "?"
+            params.forEach((param: Param) => {
+                url += `${param.key}=${param.value}&`;
+            });
+            url = url.slice(0, -1)
+        }  
+        return fetch(url, {
+            method: "DELETE"
+        }).then(response => {
+            console.log(response)
+        })
+    }
+
     public get(url: string, params: Param[]): Promise<any> {
         url = `${apiGatewayUrl}${url}`;
         if (params.length > 0) {
