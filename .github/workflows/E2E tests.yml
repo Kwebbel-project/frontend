@@ -28,6 +28,3 @@ jobs:
 
       - name: Run Cypress E2E tests
         run: npx cypress run --headless
-
-      - name: Stop Next.js app
-        run: npm run stop
